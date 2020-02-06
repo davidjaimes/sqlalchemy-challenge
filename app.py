@@ -30,7 +30,7 @@ def welcome():
         f"/api/v1.0/<start>/<end>"
     )
 @app.route("/api/v1.0/precipitation")
-def names():
+def precipitation():
     # Create our session (link) from Python to the DB
     session = Session(engine)
     """Return a list of all measurements"""
@@ -44,6 +44,15 @@ def names():
         my_dict[date] = prcp
         data_list.append(my_dict)
     return jsonify(data_list)
+@app.route("/api/v1.0/stations")
+def stations():
+    # Create our session (link) from Python to the DB
+    session = Session(engine)
+    """Return a list of all measurements"""
+    # Query all measurements
+    results = session.query(Station.station).all()
+    session.close()
+    return jsonify(list(np.ravel(results)))
 
 if __name__ == '__main__':
     app.run(debug=True)
